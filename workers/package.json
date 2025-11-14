@@ -12,5 +12,9 @@
 		"@cloudflare/vitest-pool-workers": "^0.8.19",
 		"vitest": "~3.2.0",
 		"wrangler": "^4.45.4"
+	},
+	"dependencies": {
+		"@aws-sdk/client-s3": "^3.931.0",
+		"@aws-sdk/s3-request-presigner": "^3.931.0"
 	}
 }

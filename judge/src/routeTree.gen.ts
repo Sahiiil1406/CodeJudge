@@ -15,6 +15,7 @@ import { Route as ResultRouteImport } from './routes/result'
 import { Route as ProblemsRouteImport } from './routes/problems'
 import { Route as MatchmakingRouteImport } from './routes/matchmaking'
 import { Route as FrontendRouteImport } from './routes/frontend'
+import { Route as BuyRouteImport } from './routes/buy'
 import { Route as AnotherPageRouteImport } from './routes/anotherPage'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -48,6 +49,11 @@ const FrontendRoute = FrontendRouteImport.update({
   path: '/frontend',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BuyRoute = BuyRouteImport.update({
+  id: '/buy',
+  path: '/buy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AnotherPageRoute = AnotherPageRouteImport.update({
   id: '/anotherPage',
   path: '/anotherPage',
@@ -62,6 +68,7 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/anotherPage': typeof AnotherPageRoute
+  '/buy': typeof BuyRoute
   '/frontend': typeof FrontendRoute
   '/matchmaking': typeof MatchmakingRoute
   '/problems': typeof ProblemsRoute
@@ -72,6 +79,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/anotherPage': typeof AnotherPageRoute
+  '/buy': typeof BuyRoute
   '/frontend': typeof FrontendRoute
   '/matchmaking': typeof MatchmakingRoute
   '/problems': typeof ProblemsRoute
@@ -83,6 +91,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/anotherPage': typeof AnotherPageRoute
+  '/buy': typeof BuyRoute
   '/frontend': typeof FrontendRoute
   '/matchmaking': typeof MatchmakingRoute
   '/problems': typeof ProblemsRoute
@@ -95,6 +104,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/anotherPage'
+    | '/buy'
     | '/frontend'
     | '/matchmaking'
     | '/problems'
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/anotherPage'
+    | '/buy'
     | '/frontend'
     | '/matchmaking'
     | '/problems'
@@ -115,6 +126,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/anotherPage'
+    | '/buy'
     | '/frontend'
     | '/matchmaking'
     | '/problems'
@@ -126,6 +138,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnotherPageRoute: typeof AnotherPageRoute
+  BuyRoute: typeof BuyRoute
   FrontendRoute: typeof FrontendRoute
   MatchmakingRoute: typeof MatchmakingRoute
   ProblemsRoute: typeof ProblemsRoute
@@ -178,6 +191,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FrontendRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/buy': {
+      id: '/buy'
+      path: '/buy'
+      fullPath: '/buy'
+      preLoaderRoute: typeof BuyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/anotherPage': {
       id: '/anotherPage'
       path: '/anotherPage'
@@ -198,6 +218,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnotherPageRoute: AnotherPageRoute,
+  BuyRoute: BuyRoute,
   FrontendRoute: FrontendRoute,
   MatchmakingRoute: MatchmakingRoute,
   ProblemsRoute: ProblemsRoute,

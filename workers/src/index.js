@@ -29,34 +29,120 @@ const questions = [
     { id: 18, title: "DAO Governance Smart Contract", level: "hard", category: "web3", description: "Create a DAO contract where token holders can vote on proposals.", tags: ["Solidity", "DAO", "Governance"], likes: 402, posted: "2025-07-18" },
     { id: 19, title: "Quiz App with Leaderboard", level: "easy", category: "frontend", description: "Develop a quiz app with timer and live leaderboard using React.", tags: ["React", "Timer", "State"], likes: 298, posted: "2025-10-01" },
     { id: 20, title: "Hospital Management Schema", level: "medium", category: "schema-design", description: "Design a complete SQL database for hospital patients, staff, and billing.", tags: ["Database", "Schema", "SQL"], likes: 176, posted: "2025-09-11" }
-  ];
+  ];import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+
+
 export default {
-	async fetch(request, env, ctx) {
-		// return new Response('Hello World!');
-		if(request.url.endsWith('/questions')) {
-			return new Response(JSON.stringify(questions), {
-				headers: { 'Content-Type': 'application/json' },
-			});
-		}
-    //upload endpoint can be added here in future
-    if(request.url.endsWith('/upload') && request.method === 'POST') {
-      const reqBody = await request.json();
-      const prob={
-        id: questions.length + 1,
-        title: reqBody.title,
-        level: reqBody.level,
-        category: reqBody.category,
-        description: reqBody.description,
-        tags: reqBody.tags,
-        likes: 0,
-        posted: new Date().toISOString().split('T')[0] 
-      }
-      // In a real application, you would save this to a database
-      questions.push(prob);
-      return new Response(JSON.stringify({message: "Question added successfully", question: prob}), {
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-		return new Response('Hello World From Code Judgify!');
-	},
+    async fetch(request, env, ctx) {
+        
+        // Existing questions endpoint
+        if(request.url.endsWith('/questions')) {
+            return new Response(JSON.stringify(questions), {
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+            });
+        }
+
+        // NEW: Presigned URL endpoint
+        if(request.url.endsWith('/get-upload-url') && request.method === 'POST') {
+            try {
+                const reqBody = await request.json();
+                const { fileName, fileType } = reqBody;
+
+                // Validate input
+                if (!fileName || !fileType) {
+                    return new Response(JSON.stringify({ error: 'fileName and fileType are required' }), {
+                        status: 400,
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                }
+
+                // Initialize S3 Client
+                const s3Client = new S3Client({
+                    region: env.AWS_REGION || 'us-east-1',
+                    credentials: {
+                        accessKeyId: env.AWS_ACCESS_KEY_ID,
+                        secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+                    },
+                });
+
+                // Generate unique file name
+                const uniqueFileName = `${Date.now()}-${fileName}`;
+                
+                // Create the command for putting an object
+                const command = new PutObjectCommand({
+                    Bucket: env.S3_BUCKET_NAME,
+                    Key: `uploads/${uniqueFileName}`,
+                    ContentType: fileType,
+                });
+
+                // Generate presigned URL (valid for 5 minutes)
+                const presignedUrl = await getSignedUrl(s3Client, command, { 
+                    expiresIn: 300 
+                });
+
+                return new Response(JSON.stringify({
+                    uploadUrl: presignedUrl,
+                    fileKey: `uploads/${uniqueFileName}`,
+                    publicUrl: `https://${env.S3_BUCKET_NAME}.s3.${env.AWS_REGION || 'us-east-1'}.amazonaws.com/uploads/${uniqueFileName}`
+                }), {
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
+                    },
+                });
+
+            } catch (error) {
+                return new Response(JSON.stringify({ 
+                    error: 'Failed to generate presigned URL',
+                    details: error.message 
+                }), {
+                    status: 500,
+                    headers: { 'Content-Type': 'application/json' }
+                });
+            }
+        }
+
+        // Existing upload endpoint
+        if(request.url.endsWith('/upload') && request.method === 'POST') {
+            const reqBody = await request.json();
+            const prob = {
+                id: questions.length + 1,
+                title: reqBody.title,
+                level: reqBody.level,
+                category: reqBody.category,
+                description: reqBody.description,
+                tags: reqBody.tags,
+                likes: 0,
+                posted: new Date().toISOString().split('T')[0]
+            };
+            
+            questions.push(prob);
+            return new Response(JSON.stringify({
+                message: "Question added successfully", 
+                question: prob
+            }), {
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+            });
+        }
+
+        // Handle CORS preflight
+        if (request.method === 'OPTIONS') {
+            return new Response(null, {
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                }
+            });
+        }
+
+        return new Response('Hello World From Code Judgify!');
+    },
 };

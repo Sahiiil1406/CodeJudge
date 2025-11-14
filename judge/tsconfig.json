@@ -1,5 +1,5 @@
 {
-  "include": ["**/*.ts", "**/*.tsx", "public/script*.js", "convex/payments.js"],
+  "include": ["**/*.ts", "**/*.tsx", "public/script*.js", "convex/payments.js", "src/components/PaymentForm.jsx"],
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",

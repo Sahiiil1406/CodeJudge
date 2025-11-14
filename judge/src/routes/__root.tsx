@@ -51,6 +51,19 @@ export const Route = createRootRouteWithContext<{
   component: RootComponent,
 })
 
+import * as Sentry from "@sentry/react";
+
+Sentry.init({
+  dsn: "YOUR_DSN_HERE",
+  integrations: [
+    Sentry.browserTracingIntegration(),
+    Sentry.replayIntegration(),
+  ],
+  tracesSampleRate: 1.0, // Adjust in production (0.1 = 10%)
+  replaysSessionSampleRate: 0.1,
+  replaysOnErrorSampleRate: 1.0,
+});
+
 function RootComponent() {
   return (
     <RootDocument>
