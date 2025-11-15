@@ -18,7 +18,7 @@ DevDAO (CodeJudge) is a next-gen arena for head-to-head coding battles across So
 | Technology | Implementation | Impact |
 |------------|----------------|--------|
 | **TanStack Start** | Full-document SSR streaming, server functions, nested routing, type-safe RPCs | Instant page loads, seamless full-stack development, zero API boilerplate |
-| **Convex** | Real-time matchmaking, reactive state sync, session management | Sub-second opponent matching with live updates |
+| **Convex** | Real-time matchmaking, reactive state sync, session management | Sub-second opponent matching with live updates,Real time leaderboard for contest |
 | **Cloudflare Workers** | Edge computing, serverless API routes, global CDN | <50ms response times worldwide |
 | **Sentry** | Full-stack tracing, error tracking, performance monitoring | Complete observability from browser to database |
 | **Firecrawl** | Automated documentation scraping per challenge | Context-aware learning without leaving the platform |
@@ -103,7 +103,12 @@ Never leave the coding environment:
 <img width="1860" height="940" alt="image" src="https://github.com/user-attachments/assets/aa3dc00e-afa5-48c2-b028-5241b23ccd04" />
 <img width="1820" height="944" alt="Screenshot 2025-11-07 032823" src="https://github.com/user-attachments/assets/2779213b-0bf9-498d-adb9-f72e68719101" />
 <img width="1860" height="899" alt="image" src="https://github.com/user-attachments/assets/b99bc369-4e8a-4064-8e30-8afb2f0997a5" />
+<img width="1835" height="931" alt="image" src="https://github.com/user-attachments/assets/2721b14f-e41f-4980-9934-a0435da76edc" />
+<img width="1693" height="926" alt="image" src="https://github.com/user-attachments/assets/2eaf3df8-25ee-48ce-98da-adfab3293132" />
 
+
+<img width="1855" height="933" alt="image" src="https://github.com/user-attachments/assets/2ea9f918-585a-421b-a9e9-f84c71125337" />
+<img width="1651" height="883" alt="image" src="https://github.com/user-attachments/assets/07e66403-fa23-4fae-b17f-51df6486f942" />
 
 
 ## 🙏 Acknowledgments
