@@ -23,7 +23,7 @@ import {
 } from 'lucide-react'
 
 function ResultScreen() {
-  const [result] = useState('winner') // Change to 'loser' to see loss screen
+  const [result] = useState('loser') // Change to 'loser' to see loss screen
   const [showConfetti, setShowConfetti] = useState(false)
   const [stats, setStats] = useState({
     score: 0,
